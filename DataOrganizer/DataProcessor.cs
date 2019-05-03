@@ -50,17 +50,13 @@ namespace DataOrganizer
                 var txPowerInRangeList = item.Where(i => i.TXPower >= i.MINPower && i.TXPower <= i.MAXPower).Select(i => i.TXPower);
                 var txPowerMoreThanRangeList = item.Where(i => i.TXPower > i.MAXPower).Select(i => i.TXPower);
 
-                var powerLessThanRangeList = txPowerLessThanRangeList as float[] ?? txPowerLessThanRangeList.ToArray();
-                var powerInRangeList = txPowerInRangeList as float[] ?? txPowerInRangeList.ToArray();
-                var powerMoreThanRangeList = txPowerMoreThanRangeList as float[] ?? txPowerMoreThanRangeList.ToArray();
-                
                 list.Add(new TxStatisticModel
                 {
                     Band = band,
                     PCL = item.Key,
-                    TxPowerLessThanRangeAvg = powerLessThanRangeList.Any() ? powerLessThanRangeList.Average() : 0,
-                    TxPowerInRangeAvg = powerInRangeList.Any() ? powerInRangeList.Average() : 0,
-                    TxPowerGraterThanRangeAvg = powerMoreThanRangeList.Any() ? powerMoreThanRangeList.Average() : 0,
+                    TxPowerLessThanRangeAvg = txPowerLessThanRangeList.Any() ? txPowerLessThanRangeList.Average() : 0,
+                    TxPowerInRangeAvg = txPowerInRangeList.Any() ? txPowerInRangeList.Average() : 0,
+                    TxPowerGraterThanRangeAvg = txPowerMoreThanRangeList.Any() ? txPowerMoreThanRangeList.Average() : 0,
                     PassCount = item.Count(i => i.CheckResult),
                     FailCount = item.Count(i => !i.CheckResult)
                 });

@@ -9,8 +9,16 @@ namespace DataOrganizer
         static void Main(string[] args)
         {
             Console.WriteLine("Hello!");
-            Console.Write("Enter path to data folder:");
+            Console.Write("Enter path to data folder: ");
+
             var path = Console.ReadLine();
+            Run(path);
+
+            Console.ReadKey();
+        }
+
+        private static void Run(string path)
+        {
             var reader = new DataReader();
             var result = reader.Read(path);
 
@@ -22,8 +30,6 @@ namespace DataOrganizer
             {
                 Console.WriteLine(result.Message);
             }
-
-            Console.ReadKey();
         }
 
         private static void ProcessData(string path, List<DataModel> data)
@@ -33,7 +39,8 @@ namespace DataOrganizer
 
             if (processedDataResult.Success && processedDataResult.Data != null)
             {
-                DataWriter.WriteReport(path, processedDataResult.Data);
+                var writer = new DataWriter();
+                writer.WriteReport(path, processedDataResult.Data);
                 Console.WriteLine($"Report generated and saved to: {path}");
             }
             else

@@ -108,9 +108,19 @@ namespace DataOrganizer
         private bool IsHeaderLine(string line)
         {
             var columns = Array.ConvertAll(line.Split(','), p => p.Trim());
-            var list = columns.Select(column => Constants.Headers.Contains(column)).ToList();
 
-            return list.All(b => b);
+            if (Constants.Headers.Length == columns.Length)
+            {
+                foreach (var column in columns)
+                {
+                    if (!Constants.Headers.Contains(column))
+                        return false;
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

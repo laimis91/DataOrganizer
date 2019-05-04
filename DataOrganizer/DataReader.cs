@@ -10,6 +10,11 @@ namespace DataOrganizer
 {
     public class DataReader
     {
+        /// <summary>
+        /// Read all files from all imei folders
+        /// </summary>
+        /// <param name="path">Path to data folder</param>
+        /// <returns>List of objects as a result of readed data from all files</returns>
         public ProcessResult<List<DataModel>> Read(string path)
         {
             try

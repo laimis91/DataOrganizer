@@ -7,6 +7,11 @@ namespace DataOrganizer
 {
     public class DataProcessor
     {
+        /// <summary>
+        /// Calculate data for report
+        /// </summary>
+        /// <param name="data">Data from files</param>
+        /// <returns>Calculated data</returns>
         public ProcessResult<List<TxStatisticModel>> Process(List<DataModel> data)
         {
             try

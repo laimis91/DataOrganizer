@@ -8,6 +8,12 @@ namespace DataOrganizer
 {
     public class DataWriter
     {
+        /// <summary>
+        /// Generate report
+        /// </summary>
+        /// <param name="path">Path to save report</param>
+        /// <param name="data">Calculated data to generate report</param>
+        /// <returns>Response to identify if report was successfully generated and saved</returns>
         public ProcessResult<object> WriteReport(string path, IEnumerable<TxStatisticModel> data)
         {
             try

@@ -10,6 +10,13 @@ namespace DataOrganizer
 {
     public class DataReader
     {
+        private ConcurrentBag<DataModel> _data;
+
+        public DataReader()
+        {
+            _data = new ConcurrentBag<DataModel>();
+        }
+
         /// <summary>
         /// Read all files from all imei folders
         /// </summary>
@@ -21,17 +28,12 @@ namespace DataOrganizer
             {
                 if (!Directory.Exists(path)) return new ProcessResult<List<DataModel>> { Success = true, Data = null, Message = "Given path does not exits" };
 
-                var list = new ConcurrentBag<DataModel>();
-
                 Task.WaitAll(GetDirectories(path).Select(dir => Task.Run(() =>
                     {
-                        foreach (var item in ReadFiles(dir))
-                        {
-                            list.Add(item);
-                        }
+                        ReadFiles(dir);
                     })).ToArray());
 
-                return new ProcessResult<List<DataModel>> { Success = true, Data = list.ToList() };
+                return new ProcessResult<List<DataModel>> { Success = true, Data = _data.ToList() };
             }
             catch (Exception e)
             {
@@ -60,22 +62,18 @@ namespace DataOrganizer
             return directories;
         }
 
-        private IEnumerable<DataModel> ReadFiles(string dir)
+        private void ReadFiles(string dir)
         {
             var files = Directory.GetFiles(dir);
-            var list = new List<DataModel>();
 
             foreach (var file in files)
             {
-                list.AddRange(ReadFile(file));
+                ReadFile(file);
             }
-
-            return list;
         }
 
-        private IEnumerable<DataModel> ReadFile(string file)
+        private void ReadFile(string file)
         {
-            var list = new List<DataModel>();
             var headerFound = false;
             var columnSequence = Constants.Headers;
 
@@ -103,11 +101,9 @@ namespace DataOrganizer
                         CheckResult = dataColumns[Array.IndexOf(columnSequence, "Check Result")] == "PASS"
                     };
 
-                    list.Add(model);
+                    _data.Add(model);
                 }
             }
-
-            return list;
         }
 
         private bool IsHeaderLine(string line)
